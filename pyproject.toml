@@ -13,6 +13,8 @@ dependencies = [
     "graphviz (>=0.21,<0.22)"
 ]
 
+[tool.poetry]
+package-mode = false
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
