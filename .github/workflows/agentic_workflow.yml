@@ -47,4 +47,7 @@ jobs:
 
       - name: Run agentic workflow
         working-directory: .
-        run: poetry run python -m scripts.agentic_workflow
+        run: |
+          pwd
+          echo "Running agentic workflow script..."
+          poetry run python -m scripts.agentic_workflow
