@@ -21,9 +21,9 @@ from domain.models import (
 
 load_dotenv(dotenv_path=".env")
 chat_client = OpenAIChatClient(api_key=os.getenv("OPENAI_API_KEY"), model_id=os.getenv("MODEL_ID"))
-GITHUB_TOKEN = os.getenv("GITHUB_TOKEN_FULL_PERMISIONS")
-GITHUB_REPO = os.getenv("GITHUB_REPO")
-GITHUB_OWNER = os.getenv("GITHUB_OWNER")
+GITHUB_TOKEN = os.getenv("GH_TOKEN_FULL_PERMISIONS")
+GITHUB_REPO = os.getenv("GH_REPO")
+GITHUB_OWNER = os.getenv("GH_OWNER")
 TARGET_PR_NUMBER = os.getenv("TARGET_PR_NUMBER")
 # Specify the toolsets we want. There are far more, but only these are needed for this example.
 # And we don't want to bloat the agent's context with unnecessary tools.
