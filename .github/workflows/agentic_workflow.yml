@@ -30,6 +30,11 @@ jobs:
           python-version: "3.11"
           cache: "pip"
 
+      - name: Install dependencies
+        working-directory: .
+        run: |
+          poetry install
+
       - name: Run agentic workflow
         working-directory: .
-        run: python scripts/agentic_workflow.py
+        run: poetry run python scripts/agentic_workflow.py
