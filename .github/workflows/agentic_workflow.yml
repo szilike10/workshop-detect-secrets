@@ -7,6 +7,7 @@ on:
 permissions:
   contents: read
   pull-requests: write
+  packages: read
 
 jobs:
   run:
@@ -35,6 +36,9 @@ jobs:
         with:
           version: 1.8.3
           virtualenvs-create: false
+
+      - name: Ensure Docker is available
+        uses: docker/setup-buildx-action@v3
 
       - name: Install dependencies
         working-directory: .
