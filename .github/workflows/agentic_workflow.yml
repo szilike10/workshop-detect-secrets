@@ -31,11 +31,11 @@ jobs:
           cache: "pip"
 
       - name: Install dependencies
-        working-directory: workshop-detect-secrets
+        working-directory: .
         run: |
           python -m pip install --upgrade pip
           pip install .
 
       - name: Run agentic workflow
-        working-directory: workshop-detect-secrets
+        working-directory: .
         run: python scripts/agentic_workflow.py
