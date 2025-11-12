@@ -1,0 +1,41 @@
+name: Agentic Workflow
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      MODEL_ID: ${{ secrets.MODEL_ID }}
+      GITHUB_TOKEN_FULL_PERMISIONS: ${{ secrets.GITHUB_TOKEN_FULL_PERMISIONS }}
+      GITHUB_REPO: ${{ github.repository }}
+      GITHUB_OWNER: ${{ github.repository_owner }}
+      TARGET_PR_NUMBER: ${{ github.event.pull_request.number }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        working-directory: detect-secrets-in-repo
+        run: |
+          python -m pip install --upgrade pip
+          pip install .
+
+      - name: Run agentic workflow
+        working-directory: detect-secrets-in-repo
+        run: python scripts/agentic_workflow.py
