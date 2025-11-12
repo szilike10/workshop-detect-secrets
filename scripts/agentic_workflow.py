@@ -434,7 +434,7 @@ async def main():
     github_mcp = await create_github_mcp_server()
     try:
         workflow = create_workflow(chat_client, github_mcp)
-        visualize_workflow(workflow)
+        # visualize_workflow(workflow)
         await execute_workflow(workflow)
     finally:
         await github_mcp.close()
