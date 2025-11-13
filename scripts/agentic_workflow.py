@@ -280,8 +280,10 @@ class ChunksExporterExec(Executor):
         input_chunks = []
         for file in files:
             try:
+                filepath = f"https://raw.githubusercontent.com/{file.repo_owner}/{file.repo}/refs/heads{file.source_branch}/{file.source_file}"
+                print(f"Processing file: {filepath}")
                 chunks = split_file_by_newlines(
-                    file_path=f"https://raw.githubusercontent.com/{file.repo_owner}/{file.repo}/{file.source_branch}/{file.source_file}",
+                    file_path=filepath,
                     newlines_per_chunk=10,
                     pull_request_number=file.pull_request_number,
                     repo=file.repo,
