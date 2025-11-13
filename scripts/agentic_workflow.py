@@ -25,6 +25,10 @@ GITHUB_TOKEN = os.getenv("GH_TOKEN_FULL_PERMISIONS")
 GITHUB_REPO = os.getenv("GH_REPO")
 GITHUB_OWNER = os.getenv("GH_OWNER")
 TARGET_PR_NUMBER = os.getenv("TARGET_PR_NUMBER")
+
+if '/' in GITHUB_REPO:
+    GITHUB_OWNER, GITHUB_REPO = GITHUB_REPO.split('/', 1)
+
 # Specify the toolsets we want. There are far more, but only these are needed for this example.
 # And we don't want to bloat the agent's context with unnecessary tools.
 toolsets = "context,pull_requests" 
