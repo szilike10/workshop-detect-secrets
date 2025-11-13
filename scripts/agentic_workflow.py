@@ -29,6 +29,7 @@ TARGET_PR_NUMBER = os.getenv("TARGET_PR_NUMBER")
 # And we don't want to bloat the agent's context with unnecessary tools.
 toolsets = "context,pull_requests" 
 
+print("Using GitHub repo:", f"{GITHUB_OWNER}/{GITHUB_REPO}")
 
 async def create_github_mcp_server():
     github_mcp = MCPStdioTool(
