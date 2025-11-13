@@ -15,9 +15,9 @@ jobs:
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       MODEL_ID: ${{ secrets.MODEL_ID }}
-      GITHUB_TOKEN_FULL_PERMISIONS: ${{ secrets.GITHUB_TOKEN_FULL_PERMISIONS }}
-      GITHUB_REPO: ${{ github.repository }}
-      GITHUB_OWNER: ${{ github.repository_owner }}
+      GH_TOKEN_FULL_PERMISIONS: ${{ secrets.GH_TOKEN_FULL_PERMISIONS }}
+      GH_REPO: ${{ github.repository }}
+      GH_OWNER: ${{ github.repository_owner }}
       TARGET_PR_NUMBER: ${{ github.event.pull_request.number }}
     steps:
       - name: Checkout repository
