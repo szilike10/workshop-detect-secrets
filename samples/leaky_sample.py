@@ -15,6 +15,7 @@ AWS_SESSION_TOKEN = (
     "Yj8i4m0GJH8q4q4qgMIABABGgwxMjM0NTY3ODkwMTIiEA//////////ARAA"
 )
 
+
 GCP_SERVICE_ACCOUNT_JSON = """
 {
   "type": "service_account",
