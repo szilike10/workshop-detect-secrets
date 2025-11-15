@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "agents-demo"
+version = "0.1.0"
+description = "This is a demo project for Microsoft Agent Framework. This project's scope is to flag a github repository and write comments to a pull request that might contain sensitive information like passwords, keys, PII."
+authors = ["iulia filimon <iulia-maria.filimon@mhp.com>"]
+readme = "README.md"
+packages = [{ include = "domain" }]
+include = ["main.py"]
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.14"
+agent-framework = { version = ">=1.0.0b251016,<2.0.0", allow-prereleases = true }
+pydantic = ">=2.12.3,<3.0.0"
+graphviz = ">=0.21,<0.22"
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^7.0.1"
+
+[tool.poetry.scripts]
+start = "main:start"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

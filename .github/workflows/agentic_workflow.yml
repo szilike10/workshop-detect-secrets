@@ -1,0 +1,76 @@
+name: Agentic Workflow
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+permissions:
+  contents: read
+  pull-requests: write
+  packages: read
+
+jobs:
+  run:
+    runs-on: [self-hosted, mhp-workshop-runner]
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      MODEL_ID: ${{ secrets.MODEL_ID }} 
+      GITHUB_PAT_TOKEN: ${{ secrets.GH_TOKEN }}
+      GITHUB_REPO: ${{ secrets.GH_REPOSITORY }}
+      GITHUB_OWNER: ${{ secrets.GH_REPOSITORY_OWNER }}
+      TARGET_PR_NUMBER: ${{ secrets.GH_REPOSITORY_PR_NUMBER }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      
+      # - name: Install Poetry
+      #   uses: snok/install-poetry@v1
+      #   with:
+      #     version: 2.0.0
+      #     virtualenvs-create: false
+
+      # --- macOS/Linux: ensure Poetry & Python are visible and 3.11 is used
+      - name: Verify Poetry & Python (macOS/Linux)
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          command -v poetry || { echo "Poetry not on PATH"; exit 1; }
+          poetry --version
+          # Prefer python3.11 if present; fall back to python3/python
+          PYBIN=$(command -v python3.11 || command -v python3 || command -v python)
+          "$PYBIN" -V
+          # Use an in-project venv for isolation
+          poetry config virtualenvs.in-project true
+          poetry env use "$PYBIN"
+
+      # --- Windows: same checks
+      - name: Verify Poetry & Python (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $poetry = (Get-Command poetry -ErrorAction SilentlyContinue)
+          if (-not $poetry) { Write-Error "Poetry not on PATH"; exit 1 }
+          poetry --version
+          $py = (Get-Command python.exe -ErrorAction SilentlyContinue)
+          if (-not $py) { Write-Error "Python not on PATH"; exit 1 }
+          & $py.Source -V
+          poetry config virtualenvs.in-project true
+          poetry env use $py.Source
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+
+      - name: Install dependencies
+        working-directory: .
+        run: |
+          poetry install
+
+      - name: Run agentic workflow
+        working-directory: .
+        run: |
+          pwd
+          echo "Running agentic workflow script..."
+          poetry run start
