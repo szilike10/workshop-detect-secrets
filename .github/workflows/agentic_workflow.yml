@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   run:
-    runs-on: [self-hosted, mhp-workshop-runner]
+    runs-on: ubuntu-latest
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       MODEL_ID: ${{ secrets.MODEL_ID }} 
@@ -25,32 +25,18 @@ jobs:
         with:
           fetch-depth: 0
 
-      # --- macOS/Linux: ensure Poetry & Python are visible and 3.11 is used
-      - name: Verify Poetry & Python (macOS/Linux)
-        if: runner.os != 'Windows'
-        shell: bash
-        run: |
-          command -v poetry || { echo "Poetry not on PATH"; exit 1; }
-          poetry --version
-          # Prefer python3.11 if present; fall back to python3/python
-          PYBIN=$(command -v python3.11 || command -v python3 || command -v python)
-          "$PYBIN" -V
-          # Use an in-project venv for isolation
-          poetry config virtualenvs.in-project true
-          poetry env use "$PYBIN"
-      # --- Windows: same checks
-      - name: Verify Poetry & Python (Windows)
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: |
-          $poetry = (Get-Command poetry -ErrorAction SilentlyContinue)
-          if (-not $poetry) { Write-Error "Poetry not on PATH"; exit 1 }
-          poetry --version
-          $py = (Get-Command python.exe -ErrorAction SilentlyContinue)
-          if (-not $py) { Write-Error "Python not on PATH"; exit 1 }
-          & $py.Source -V
-          poetry config virtualenvs.in-project true
-          poetry env use $py.Source
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 2.0.0
+          virtualenvs-create: false
+
       - name: Set up Docker
         uses: docker/setup-buildx-action@v3
 
@@ -58,6 +44,7 @@ jobs:
         working-directory: .
         run: |
           poetry install
+
       - name: Run agentic workflow
         working-directory: .
         run: |
